@@ -1,0 +1,81 @@
+Deployment verification — 2026-10-19 KST
+Repository: https://github.com/Hwannd65/mobweb-mid-project
+Implementation commit: 7e8f1a0 (account/signup/login, title/author search, recommendations, comments, sorting)
+Target: https://hwannd65mid.pythonanywhere.com — account hwannd65mid only.
+Old assignment repository/domain hwannd65/web_blog was not changed.
+Remote DB backup: /home/hwannd65mid/db-before-7e8f1a0.sqlite3 (mode 600, outside repository/web mappings).
+Exact auth_user and blog_post rows compared with backup and preserved.
+Fast-forward Git pull completed. Production settings check passed.
+Migrations blog.0005_recommendation and blog.0006_comment applied successfully.
+collectstatic: 0 copied, 158 unmodified. Web app Reload completed.
+On PythonAnywhere, 76 server tests passed using mysite.production_settings and a separate test DB.
+External HTTPS checks: 15 passed (details below). No successful cloud data mutations were performed.
+Android emulator: installed default-cloud app; CloudSyncIntegrationTest passed (1 test, 4.915s).
+Observed real cloud JSON retrieval and image display with new sorting support and recommendation/comment controls.
+Previous timeout was not reproduced after this deployment; current external API and Android checks passed.
+Evidence: captures/13_02_client_cloud_updated_sync.png and captures/14_16_cloud_updated_api.png.
+Earlier feature verification files are historical snapshots; their pending deployment notes are superseded by this record.
+Word submission report remains to be finalized separately.
+
+[
+  {
+    "path": "/api_root/Post/?sort=newest",
+    "status": 200
+  },
+  {
+    "path": "/api_root/Post/?sort=oldest",
+    "status": 200
+  },
+  {
+    "path": "/api_root/Post/?sort=recommendations",
+    "status": 200
+  },
+  {
+    "path": "/api_root/Post/?sort=comments",
+    "status": 200
+  },
+  {
+    "path": "/api_root/Post/?search=%ED%81%B4%EB%9D%BC%EC%9A%B0%EB%93%9C+%EC%B2%AB+%EA%B2%8C%EC%8B%9C%EB%AC%BC&search_field=title&sort=comments",
+    "status": 200
+  },
+  {
+    "path": "/api_root/Post/?search=hwannd65&search_field=author&sort=comments",
+    "status": 200
+  },
+  {
+    "path": "/api_root/Post/?sort=invalid",
+    "status": 400
+  },
+  {
+    "path": "/api/me/",
+    "status": 401
+  },
+  {
+    "path": "/api/register/",
+    "status": 400
+  },
+  {
+    "path": "/api_root/Post/1/comments/",
+    "status": 200
+  },
+  {
+    "path": "/api_root/Post/1/comments/",
+    "status": 401
+  },
+  {
+    "path": "/api_root/Post/1/recommendation/",
+    "status": 401
+  },
+  {
+    "path": "/",
+    "status": 200
+  },
+  {
+    "path": "/static/css/blog.css",
+    "status": 200
+  },
+  {
+    "path": "/media/images/2026/10/19/Korea.jpg",
+    "status": 200
+  }
+]
