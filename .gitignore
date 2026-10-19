@@ -1,0 +1,29 @@
+# macOS
+.DS_Store
+
+# Python and local configuration
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.env
+.env.*
+!.env.example
+*.log
+db.sqlite3
+db.sqlite3-journal
+.coverage
+.coverage.*
+htmlcov/
+.pytest_cache/
+
+# Android local and generated files
+.gradle/
+.kotlin/
+.idea/
+local.properties
+**/build/
+.cxx/
+.externalNativeBuild/
+*.jks
+*.keystore

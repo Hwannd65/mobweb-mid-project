@@ -1,0 +1,32 @@
+<resources>
+    <string name="app_name">PhotoViewer</string>
+    <string name="sync_images">동기화</string>
+    <string name="upload_image">새로운 이미지 게시</string>
+    <string name="sync_hint">동기화하면 서버의 이미지가 표시됩니다.</string>
+    <string name="post_image">게시물 이미지</string>
+    <string name="sync_loading">서버에서 이미지를 불러오는 중입니다…</string>
+    <string name="sync_empty">불러올 이미지가 없습니다.</string>
+    <string name="sync_success">이미지 %1$d개 동기화 완료</string>
+    <string name="sync_failed">동기화 실패: %1$s</string>
+    <string name="sync_timeout">서버 응답 시간이 초과되었습니다. 다시 시도해 주세요.</string>
+    <string name="sync_connection_failed">서버에 연결할 수 없습니다. 서버 실행 상태를 확인해 주세요.</string>
+    <string name="sync_invalid_json">서버 JSON 응답을 해석하지 못했습니다.</string>
+    <string name="local_network_permission_denied">Mac의 개발 서버에 연결하려면 로컬 네트워크 접근을 허용해 주세요.</string>
+    <string name="submit_post">게시</string>
+    <string name="cancel">취소</string>
+    <string name="author_id">작성자 ID</string>
+    <string name="default_author_id">1</string>
+    <string name="post_title">제목</string>
+    <string name="post_text">내용</string>
+    <string name="choose_image">이미지 선택</string>
+    <string name="no_image_selected">선택한 이미지가 없습니다.</string>
+    <string name="choose_image_first">게시할 이미지를 선택해 주세요.</string>
+    <string name="required_field">필수 입력 항목입니다.</string>
+    <string name="invalid_author_id">존재하는 작성자의 양수 ID를 입력해 주세요.</string>
+    <string name="upload_loading">이미지를 게시하는 중입니다…</string>
+    <string name="upload_success">게시 완료: %1$s\n동기화를 눌러 이미지를 확인하세요.</string>
+    <string name="upload_failed">게시 실패: %1$s</string>
+    <string name="upload_rejected">서버가 요청을 거절했습니다 (HTTP %1$d): %2$s</string>
+    <string name="upload_image_permission_denied">선택한 이미지를 읽을 수 없습니다. 이미지를 다시 선택해 주세요.</string>
+    <string name="upload_result_uncertain">서버 응답을 확인하지 못했습니다. 동기화로 등록 여부를 확인한 뒤 다시 시도해 주세요.</string>
+</resources>

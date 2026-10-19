@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<testsuites tests="2" failures="0" errors="0" skipped="0" time="0.000" timestamp="2026-10-19T01:13:23" hostname="localhost">
+  <testsuite name="com.example.photoviewer.UploadIntegrationTest" tests="2" failures="0" errors="0" skipped="0" time="19.886" timestamp="2026-10-19T01:13:23" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554" />
+    </properties>
+    <testcase name="selectImageAndUploadToDjango" classname="com.example.photoviewer.UploadIntegrationTest" time="14.265" />
+    <testcase name="invalidImageIsRejectedByDjango" classname="com.example.photoviewer.UploadIntegrationTest" time="5.621" />
+  </testsuite>
+</testsuites>

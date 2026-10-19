@@ -1,0 +1,5 @@
+[run]
+source = blog
+omit =
+    */tests.py
+    */migrations/*
