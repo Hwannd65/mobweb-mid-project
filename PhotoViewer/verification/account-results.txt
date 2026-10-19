@@ -1,0 +1,11 @@
+Account feature verification — 2026-10-19 KST
+Server: 26 Django tests passed (isolated Django test DB).
+Android: 10 tests passed; actual HTTP integration used an isolated local Django DB on port 8001.
+Verified: registration, server password validation, password hashing, duplicate handling,
+token login, identity lookup, rotation retention, logout revocation, authenticated multipart upload,
+invalid image rejection, author spoof prevention and other-user edit/delete denial.
+Existing assignment DB and cloud account data were not modified by these tests.
+Screenshots: captures/14_01_account_signup.png, 14_02_account_login.png, 14_03_account_logout.png.
+Cloud deployment of these account APIs is still pending.
+Final default-cloud build: existing read-only cloud synchronization test passed (1 test).
+Coverage excluding test code: blog total 81%; blog/accounts.py 98%.

@@ -8,7 +8,11 @@ android {
         version = release(37)
     }
 
+    buildFeatures { buildConfig = true }
     defaultConfig {
+        val serverUrl = providers.gradleProperty("photoBlogUrl")
+            .orElse("https://hwannd65mid.pythonanywhere.com").get()
+        buildConfigField("String", "PHOTO_BLOG_URL", "\"$serverUrl\"")
         applicationId = "com.example.photoviewer"
         minSdk = 24
         targetSdk = 37

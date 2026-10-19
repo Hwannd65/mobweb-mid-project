@@ -1,0 +1,9 @@
+Search feature verification — 2026-10-19 KST
+Scope: title and author username only; default is title.
+Server: 38 tests passed, including 12 search cases. Coverage excluding tests: 83%.
+Android: 10 tests passed (7 HTTP contract tests, 1 login form test, 2 actual search integration tests).
+Integration target: isolated Django DB at http://10.0.2.2:8001.
+Verified: title/author search, Korean phrase, reserved query characters, empty results,
+reset to the full list, unsupported all/text scopes rejected with HTTP 400, legacy server detection.
+Screenshots: captures/14_04_search_title.png, 14_05_search_author.png, 14_06_search_empty.png.
+GitHub push and cloud deployment of account/search changes remain pending.

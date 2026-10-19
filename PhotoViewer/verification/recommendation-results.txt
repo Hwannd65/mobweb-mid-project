@@ -1,0 +1,11 @@
+Recommendation feature verification — 2026-10-19 KST
+Server: 51 tests passed, including 13 recommendation tests. Coverage excluding tests: 86%.
+Android: 18 tests passed: 9 HTTP contract, 1 login form, 3 recommendation integration,
+2 search integration, 1 account integration, 2 upload integration.
+Real integration used an isolated local Django DB on port 8001, not the student's existing post DB.
+Verified: PUT recommend / DELETE cancel, repeated requests, separate users, authenticated list flags,
+no token header on image downloads, guest login prompt, refresh persistence and account switch.
+Database: migration 0005_recommendation applied locally; existing user/post counts preserved.
+Screenshots: captures/14_07_post_recommend.png, 14_08_post_cancel_recommend.png.
+GitHub push and PythonAnywhere deployment of these changes remain pending.
+Final default-cloud build/lint passed; existing cloud image sync passed (1 additional read-only test).

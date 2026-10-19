@@ -23,49 +23,222 @@ import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Date;
 import java.util.LinkedHashMap;
-import java.util.Locale;
 import java.util.Map;
-import java.util.TimeZone;
-import java.text.SimpleDateFormat;
 
 // ch05 pp. 21-22: API GET -> JSON array -> image URL GET -> Bitmap list.
 // Called from a worker thread, never directly from the screen's main thread.
 public final class PhotoBlogClient {
     private static final String TAG = "PhotoBlogClient";
     private final String siteUrl;
+    // Credentials live only in this client instance, never in preferences, files or logs.
+    private volatile Session session;
+    interface SessionListener { void changed(String username); }
+    private SessionListener sessionListener;
+    void setSessionListener(SessionListener listener) { sessionListener = listener; }
+    public void clearSession() {
+        session = null;
+        if (sessionListener != null) sessionListener.changed("");
+    }
+
+    public JSONObject register(String username, String password, String confirmation)
+            throws IOException, JSONException {
+        JSONObject data = new JSONObject();
+        data.put("username", username);
+        data.put("password", password);
+        data.put("password_confirm", confirmation);
+        return new JSONObject(accountRequest("POST", "/api/register/", data, null,
+                HttpURLConnection.HTTP_CREATED));
+    }
+
+    private static final class Session {
+        final String token;
+        final int userId;
+        final String username;
+
+        Session(String token, int userId, String username) {
+            this.token = token;
+            this.userId = userId;
+            this.username = username;
+        }
+    }
+
+    public boolean isLoggedIn() { return session != null; }
+
+    public String getCurrentUsername() {
+        Session current = session;
+        return current == null ? "" : current.username;
+    }
+
+    public synchronized void login(String username, String password) throws IOException, JSONException {
+        JSONObject credentials = new JSONObject();
+        credentials.put("username", username);
+        credentials.put("password", password);
+        JSONObject result = new JSONObject(accountRequest("POST", "/api-token-auth/",
+                credentials, null, HttpURLConnection.HTTP_OK));
+        String token = result.getString("token");
+        if (token.isEmpty() || token.contains("\r") || token.contains("\n")) {
+            throw new JSONException("Invalid token response");
+        }
+        // Do not display a signed-in identity until the server verifies this token.
+        JSONObject user = new JSONObject(accountRequest("GET", "/api/me/", null,
+                token, HttpURLConnection.HTTP_OK));
+        int userId = user.getInt("id");
+        String name = user.getString("username");
+        if (userId <= 0 || name.isEmpty()) throw new JSONException("Invalid user response");
+        session = new Session(token, userId, name);
+        if (sessionListener != null) sessionListener.changed(name);
+    }
+
+    public synchronized void logout() throws IOException, JSONException {
+        Session current = session;
+        if (current == null) return;
+        try {
+            accountRequest("POST", "/api/logout/", new JSONObject(), current.token,
+                    HttpURLConnection.HTTP_NO_CONTENT);
+        } catch (ApiException error) {
+            // An already revoked token is also a completed logout on this device.
+            if (error.getStatus() != HttpURLConnection.HTTP_UNAUTHORIZED) throw error;
+        }
+        clearSession();
+    }
+
+    private String accountRequest(String method, String path, JSONObject body,
+                                  String token, int expectedStatus) throws IOException {
+        HttpURLConnection connection = (HttpURLConnection) new URL(siteUrl + path).openConnection();
+        try {
+            connection.setRequestMethod(method);
+            connection.setInstanceFollowRedirects(false);
+            connection.setRequestProperty("Accept", "application/json");
+            connection.setConnectTimeout(3000);
+            connection.setReadTimeout(10000);
+            connection.setUseCaches(false);
+            if (token != null) connection.setRequestProperty("Authorization", "Token " + token);
+            if (body != null) {
+                byte[] bytes = body.toString().getBytes(StandardCharsets.UTF_8);
+                connection.setDoOutput(true);
+                connection.setRequestProperty("Content-Type", "application/json; charset=utf-8");
+                connection.setFixedLengthStreamingMode(bytes.length);
+                try (OutputStream output = connection.getOutputStream()) {
+                    output.write(bytes);
+                }
+            }
+            int status = connection.getResponseCode();
+            // Neither credentials nor response bodies (which may contain a token) are logged.
+            Log.d(TAG, method + " " + path + " -> HTTP " + status);
+            String response = readBody(status >= 400
+                    ? connection.getErrorStream() : connection.getInputStream());
+            if (status != expectedStatus) throw new ApiException(status, response);
+            return response;
+        } finally {
+            connection.disconnect();
+        }
+    }
 
     public PhotoBlogClient(String siteUrl) {
         this.siteUrl = siteUrl;
     }
 
     public List<Bitmap> downloadImages() throws IOException, JSONException {
-        String json = getJson(new URL(siteUrl + "/api_root/Post/"));
-        JSONArray posts = new JSONArray(json);
         List<Bitmap> images = new ArrayList<>();
-        for (int index = 0; index < posts.length(); index++) {
-            if (Thread.currentThread().isInterrupted()) {
-                throw new IOException("다운로드가 중단되었습니다.");
-            }
-            JSONObject post = posts.getJSONObject(index);
-            String imageUrl = post.optString("image", "");
-            if (!imageUrl.isEmpty() && !"null".equals(imageUrl)) {
-                images.add(getImage(new URL(imageUrl)));
-            }
+        for (PhotoPost post : downloadPosts("", "title")) {
+            if (post.image != null) images.add(post.image);
         }
         return images;
     }
 
-    public JSONObject uploadPost(Context context, Uri imageUri, int authorId,
+    public List<PhotoPost> downloadPosts(String keyword, String field) throws IOException, JSONException {
+        return loadPosts(keyword, field, null);
+    }
+
+    public List<PhotoPost> downloadPosts(String keyword, String field, String sort) throws IOException, JSONException {
+        if (!java.util.Arrays.asList("newest", "oldest", "recommendations", "comments").contains(sort)) {
+            throw new IOException("지원하지 않는 정렬 방식입니다.");
+        }
+        return loadPosts(keyword, field, sort);
+    }
+
+    private List<PhotoPost> loadPosts(String keyword, String field, String sort) throws IOException, JSONException {
+        Uri.Builder url = Uri.parse(siteUrl + "/api_root/Post/").buildUpon();
+        if (!keyword.trim().isEmpty()) {
+            url.appendQueryParameter("search", keyword.trim());
+            url.appendQueryParameter("search_field", field);
+        }
+        if (sort != null) url.appendQueryParameter("sort", sort);
+        JSONArray posts = new JSONArray(getJson(new URL(url.build().toString()), !keyword.trim().isEmpty(), sort));
+        List<PhotoPost> results = new ArrayList<>();
+        for (int index = 0; index < posts.length(); index++) {
+            if (Thread.currentThread().isInterrupted()) throw new IOException("다운로드가 중단되었습니다.");
+            JSONObject post = posts.getJSONObject(index);
+            String imageUrl = post.optString("image", "");
+            Bitmap image = imageUrl.isEmpty() || "null".equals(imageUrl)
+                    ? null : getImage(new URL(imageUrl));
+            int authorId = post.optInt("author", 0);
+            results.add(new PhotoPost(post.optInt("id", 0), authorId,
+                    post.optString("author_username", "작성자 #" + authorId),
+                    post.getString("title"), post.optString("text", ""), image,
+                    post.optInt("recommendation_count", 0), post.optBoolean("is_recommended", false),
+                    post.optInt("id", 0) > 0 && post.has("recommendation_count") && post.has("is_recommended"),
+                    post.optInt("comment_count", 0), post.optInt("id", 0) > 0 && post.has("comment_count")));
+        }
+        return results;
+    }
+
+    public List<PhotoComment> getComments(int postId) throws IOException, JSONException {
+        JSONArray data = new JSONArray(getJson(new URL(siteUrl + "/api_root/Post/" + postId + "/comments/"), false));
+        List<PhotoComment> comments = new ArrayList<>();
+        for (int i = 0; i < data.length(); i++) comments.add(new PhotoComment(data.getJSONObject(i)));
+        return comments;
+    }
+
+    public JSONObject createComment(int postId, String text) throws IOException, JSONException {
+        Session current = session;
+        if (current == null) throw new ApiException(401, "{}");
+        JSONObject body = new JSONObject();
+        body.put("text", text);
+        try {
+            return new JSONObject(accountRequest("POST", "/api_root/Post/" + postId + "/comments/",
+                    body, current.token, HttpURLConnection.HTTP_CREATED));
+        } catch (ApiException error) {
+            if (error.getStatus() == HttpURLConnection.HTTP_UNAUTHORIZED) clearSession();
+            throw error;
+        }
+    }
+
+    public void deleteComment(int postId, int commentId) throws IOException {
+        Session current = session;
+        if (current == null) throw new ApiException(401, "{}");
+        try {
+            accountRequest("DELETE", "/api_root/Post/" + postId + "/comments/" + commentId + "/",
+                    null, current.token, HttpURLConnection.HTTP_NO_CONTENT);
+        } catch (ApiException error) {
+            if (error.getStatus() == HttpURLConnection.HTTP_UNAUTHORIZED) clearSession();
+            throw error;
+        }
+    }
+
+    public JSONObject setRecommendation(int postId, boolean recommended) throws IOException, JSONException {
+        Session current = session;
+        if (current == null) throw new ApiException(401, "{}");
+        if (postId <= 0) throw new IOException("서버의 추천 기능 업데이트가 필요합니다.");
+        try {
+            return new JSONObject(accountRequest(recommended ? "PUT" : "DELETE",
+                    "/api_root/Post/" + postId + "/recommendation/",
+                    recommended ? new JSONObject() : null, current.token, HttpURLConnection.HTTP_OK));
+        } catch (ApiException error) {
+            if (error.getStatus() == HttpURLConnection.HTTP_UNAUTHORIZED) clearSession();
+            throw error;
+        }
+    }
+
+    public JSONObject uploadPost(Context context, Uri imageUri,
                                  String title, String text) throws IOException, JSONException {
+        Session current = session;
+        if (current == null) throw new ApiException(401, "{}");
         Map<String, String> fields = new LinkedHashMap<>();
-        fields.put("author", Integer.toString(authorId));
         fields.put("title", title);
         fields.put("text", text);
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US);
-        dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-        fields.put("published_date", dateFormat.format(new Date()));
+        // The server supplies the author and timestamps from the authenticated request.
 
         // A cache file gives an exact Content-Length without holding the entire image in RAM.
         try (MultipartBody body = MultipartBody.create(context, imageUri, fields)) {
@@ -73,6 +246,8 @@ public final class PhotoBlogClient {
                     (HttpURLConnection) new URL(siteUrl + "/api_root/Post/").openConnection();
             try {
                 connection.setRequestMethod("POST");
+                connection.setInstanceFollowRedirects(false);
+                connection.setRequestProperty("Authorization", "Token " + current.token);
                 connection.setDoOutput(true);
                 connection.setRequestProperty("Accept", "application/json");
                 connection.setRequestProperty("Content-Type",
@@ -89,6 +264,7 @@ public final class PhotoBlogClient {
                 Log.d(TAG, "POST /api_root/Post/ -> HTTP " + status);
                 String responseBody = readBody(status >= 400
                         ? connection.getErrorStream() : connection.getInputStream());
+                if (status == HttpURLConnection.HTTP_UNAUTHORIZED) clearSession();
                 if (status != HttpURLConnection.HTTP_CREATED) {
                     throw new ApiException(status, responseBody);
                 }
@@ -135,23 +311,43 @@ public final class PhotoBlogClient {
         connection.setConnectTimeout(3000);
         connection.setReadTimeout(5000);
         connection.setUseCaches(false);
-        // No Authorization header: the current Django API permits anonymous access.
+        // Public reads and image downloads do not need credentials. Never send tokens to image URLs.
         return connection;
     }
 
     private void requireOk(HttpURLConnection connection) throws IOException {
         // getResponseCode() starts the request and waits for the response headers.
         int status = connection.getResponseCode();
-        Log.d(TAG, "GET " + connection.getURL().getPath() + " -> HTTP " + status);
+        URL url = connection.getURL();
+        // Search phrases are user data: log the destination, without its query string.
+        Log.d(TAG, "GET " + url.getProtocol() + "://" + url.getAuthority()
+                + url.getPath() + " -> HTTP " + status);
         if (status != HttpURLConnection.HTTP_OK) {
             throw new IOException("서버 응답 HTTP " + status);
         }
     }
 
-    private String getJson(URL url) throws IOException {
+    private String getJson(URL url, boolean requiresSearch) throws IOException {
+        return getJson(url, requiresSearch, null);
+    }
+
+    private String getJson(URL url, boolean requiresSearch, String requestedSort) throws IOException {
         HttpURLConnection connection = openGet(url, "application/json");
         try {
+            // Only the API JSON request receives credentials; image URL GETs stay anonymous.
+            Session current = session;
+            if (current != null) connection.setRequestProperty("Authorization", "Token " + current.token);
+            if (connection.getResponseCode() == HttpURLConnection.HTTP_UNAUTHORIZED) {
+                clearSession();
+                throw new ApiException(401, "{}");
+            }
             requireOk(connection);
+            if (requiresSearch && !"1".equals(connection.getHeaderField("X-PhotoBlog-Search"))) {
+                throw new IOException("서버의 검색 기능 업데이트가 필요합니다.");
+            }
+            if (requestedSort != null && !requestedSort.equals(connection.getHeaderField("X-PhotoBlog-Sort"))) {
+                throw new IOException("서버의 정렬 기능 업데이트가 필요합니다.");
+            }
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(
                     connection.getInputStream(), StandardCharsets.UTF_8))) {
                 StringBuilder body = new StringBuilder();

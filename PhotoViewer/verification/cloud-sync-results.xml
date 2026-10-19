@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<testsuites tests="1" failures="0" errors="0" skipped="0" time="0.000" timestamp="2026-10-19T02:51:56" hostname="localhost">
+  <testsuite name="com.example.photoviewer.CloudSyncIntegrationTest" tests="1" failures="0" errors="0" skipped="0" time="3.792" timestamp="2026-10-19T02:51:56" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554" />
+    </properties>
+    <testcase name="syncButtonDisplaysCloudImages" classname="com.example.photoviewer.CloudSyncIntegrationTest" time="3.792" />
+  </testsuite>
+</testsuites>

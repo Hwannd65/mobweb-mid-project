@@ -45,6 +45,7 @@ class PostAPITests(APITestCase):
         
     def test_post_creates_post(self):
         author = User.objects.create_user(username="post_author")
+        self.client.force_authenticate(user=author)
 
         payload = {
             "author": author.pk,
@@ -71,6 +72,7 @@ class PostAPITests(APITestCase):
         
     def test_post_creates_post_with_image(self):
         author = User.objects.create_user(username="image_author")
+        self.client.force_authenticate(user=author)
         image_path = settings.BASE_DIR / "media" / "images" / "pig.png"
 
         with TemporaryDirectory() as media_root:
@@ -107,6 +109,7 @@ class PostAPITests(APITestCase):
                     )
     def test_post_without_title_is_rejected(self):
         author = User.objects.create_user(username="invalid_author")
+        self.client.force_authenticate(user=author)
 
         payload = {
             "author": author.pk,
@@ -127,6 +130,7 @@ class PostAPITests(APITestCase):
         
     def test_post_rejects_invalid_image(self):
         author = User.objects.create_user(username="invalid_image_author")
+        self.client.force_authenticate(user=author)
 
         image_file = SimpleUploadedFile(
             "fake.png",

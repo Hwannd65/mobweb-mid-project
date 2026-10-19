@@ -1,0 +1,21 @@
+Sorting feature verification — 2026-10-19 KST
+Implemented API query: sort=newest|oldest|recommendations|comments; default newest.
+Latest/oldest use immutable creation time, then unique primary key; count modes use count descending, then creation/id descending.
+Title/author search and sorting are combined in the database query. Response remains a JSON array.
+Counts use distinct=True; unknown sort names, database-field names, SQL-like strings and explicit empty sort return HTTP 400.
+X-PhotoBlog-Sort reports applied mode; Android refuses a missing/mismatched header for explicit sorting.
+Android: four-choice selector with Apply; searches, sync and comment return use selected mode;
+recommendation mode refreshes the server list after recommend/cancel. Selected mode survives Activity recreation.
+Server: 76 tests passed (10 new sorting tests); coverage excluding tests/migrations: 88%.
+Android sorting/HTTP batch: 16 tests passed (13 HTTP contract + 3 sorting integration).
+Verified actual request encoding, server response order, all four modes, ties, search/reset/recreation,
+and automatic ranking change after recommendation.
+Integration mutations used only /private/tmp/moweb-account-integration/db.sqlite3.
+Existing student DB unchanged: users=1, posts=3, recommendations=0, comments=0.
+Screenshots: captures/14_12_sort_newest.png, 14_13_sort_oldest.png,
+14_14_sort_recommendations.png, 14_15_sort_comments.png (original 1080x2400 PNG).
+Default-cloud app/test APK build and lint passed. No new database migration is needed for sorting.
+GitHub push and PythonAnywhere deployment remain pending. The new app requires the updated server for sorted sync.
+No cloud sync pass is claimed for this feature before deployment.
+Existing-feature Android regression: all 12 additional tests passed (login UI 1, comments 3, recommendations 3, search 2, accounts 1, upload 2). Total 28 distinct Android tests passed across two batches.
+Final default-cloud app and test APK restored on emulator. Local isolated test server stopped after verification.

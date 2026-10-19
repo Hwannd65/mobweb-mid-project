@@ -1,5 +1,5 @@
 [run]
 source = blog
 omit =
-    */tests.py
+    */test*.py
     */migrations/*

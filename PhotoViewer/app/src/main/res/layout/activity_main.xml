@@ -10,6 +10,29 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp">
+        <TextView
+            android:id="@+id/account_status"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:accessibilityLiveRegion="polite"
+            android:text="@string/account_guest"
+            android:textSize="16sp" />
+        <Button
+            android:id="@+id/btn_account"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minHeight="48dp"
+            android:text="@string/login" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:paddingStart="16dp"
         android:paddingTop="8dp"
@@ -31,6 +54,44 @@
             android:layout_weight="1"
             android:minHeight="48dp"
             android:text="@string/upload_image" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:orientation="horizontal" android:gravity="center_vertical"
+        android:paddingStart="16dp" android:paddingTop="8dp" android:paddingEnd="16dp">
+        <Spinner
+            android:id="@+id/search_field"
+            android:layout_width="128dp" android:layout_height="48dp"
+            android:entries="@array/search_fields" android:contentDescription="@string/search_target" />
+        <EditText
+            android:id="@+id/search_keyword"
+            android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content"
+            android:minHeight="48dp" android:hint="@string/search_hint"
+            android:inputType="text" android:singleLine="true" android:imeOptions="actionSearch"
+            android:importantForAutofill="no" android:maxLength="200" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:orientation="horizontal" android:paddingStart="16dp" android:paddingEnd="16dp">
+        <Button android:id="@+id/btn_search"
+            android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content"
+            android:text="@string/search" />
+        <Button android:id="@+id/btn_search_clear"
+            android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content"
+            android:layout_marginStart="8dp" android:text="@string/search_clear" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:orientation="horizontal" android:gravity="center_vertical"
+        android:paddingStart="16dp" android:paddingEnd="16dp">
+        <Spinner android:id="@+id/sort_order"
+            android:layout_width="0dp" android:layout_weight="1" android:layout_height="48dp"
+            android:entries="@array/sort_orders" android:contentDescription="@string/sort_order" />
+        <Button android:id="@+id/btn_sort"
+            android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:minHeight="48dp" android:text="@string/sort_apply" />
     </LinearLayout>
 
     <TextView

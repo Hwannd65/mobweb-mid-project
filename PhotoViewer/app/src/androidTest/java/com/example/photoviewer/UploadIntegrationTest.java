@@ -54,6 +54,8 @@ public class UploadIntegrationTest {
     public void requireExplicitIntegrationRun() throws Exception {
         assumeTrue(Boolean.parseBoolean(InstrumentationRegistry.getArguments()
                 .getString("djangoUploadTest", "false")));
+        assumeTrue("This upload test targets the local Django server only",
+                MainActivity.SITE_URL.startsWith("http://10.0.2.2:"));
         assumeTrue(Build.VERSION.SDK_INT >= 29);
         context = InstrumentationRegistry.getInstrumentation().getTargetContext();
         device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
@@ -67,8 +69,14 @@ public class UploadIntegrationTest {
             if (allow != null) allow.click();
             assertTrue("Django GET must work before testing POST",
                     device.wait(Until.hasObject(By.res(PACKAGE, "textView")
-                            .text(Pattern.compile("이미지 [0-9]+개 동기화 완료"))), 15000));
+                            .text(Pattern.compile("게시물 [0-9]+개 동기화 완료"))), 15000));
         }
+        PhotoBlogClient client = ((PhotoViewerApplication) context.getApplicationContext()).client();
+        client.clearSession();
+        String username = "upload_test_" + System.currentTimeMillis();
+        String password = "River!Quartz-29-Sun";
+        client.register(username, password, password);
+        client.login(username, password);
     }
 
     @Test
@@ -134,7 +142,7 @@ public class UploadIntegrationTest {
 
             onView(withId(R.id.btn_load)).perform(click());
             assertTrue(device.wait(Until.hasObject(By.res(PACKAGE, "textView")
-                    .text(Pattern.compile("이미지 [0-9]+개 동기화 완료"))), 20000));
+                    .text(Pattern.compile("게시물 [0-9]+개 동기화 완료"))), 20000));
             saveScreenshot("10_client_sync_after_upload.png");
         }
     }
@@ -196,8 +204,8 @@ public class UploadIntegrationTest {
                 output.write("this is not a real image".getBytes(StandardCharsets.UTF_8));
             }
             try {
-                new PhotoBlogClient("http://10.0.2.2:8000").uploadPost(context,
-                        Uri.fromFile(fake), 1, "거절되어야 하는 Android 이미지",
+                ((PhotoViewerApplication) context.getApplicationContext()).client().uploadPost(context,
+                        Uri.fromFile(fake), "거절되어야 하는 Android 이미지",
                         "이미지가 아닌 파일은 저장되면 안 됩니다.");
                 fail("An invalid image must not receive HTTP 201");
             } catch (PhotoBlogClient.ApiException error) {

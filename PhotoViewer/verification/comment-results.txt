@@ -1,0 +1,16 @@
+Comment feature verification — 2026-10-19 KST
+Server: 66 tests passed, including 15 comment tests. Coverage excluding tests/migrations: 88%.
+Android local: 22 tests passed: 10 HTTP contract, 1 login form, 3 comment integration,
+3 recommendation integration, 2 search integration, 1 account integration, 2 upload integration.
+Final comment UI error-clear fix: relevant create/refresh/cancel/delete test rerun and passed.
+Real mutation tests used the isolated local Django DB on port 8001, not existing student data or cloud data.
+Verified: public GET, authenticated POST 201, own DELETE 204, anonymous write 401,
+other author/post owner delete 403, wrong parent 404, empty/whitespace/over-1000 validation 400,
+server-assigned author/post/date, chronological list, per-user can_delete, distinct recommendation/comment counts,
+refresh persistence, delete confirmation/cancel, guest read/login return, draft preservation on failure.
+Migration 0006_comment applied locally. Original DB counts preserved: users 1, posts 3, recommendations 0.
+Original PNG evidence: captures/14_09_comment_created.png, 14_10_comment_deleted.png, 14_11_comment_guest.png.
+Default cloud build, test APK build and lint passed. Cloud connection check recorded below.
+GitHub push and PythonAnywhere deployment of new features remain pending. No cloud comments were written.
+Cloud read-only regression: NOT PASSED this run. Two Android attempts timed out while reading the deployed API; independent Mac HTTP GET also timed out after 20 seconds with no response bytes (HTTP 000).
+Default cloud APK/test APK remain installed. No deployment or remote configuration changes were made.

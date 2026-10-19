@@ -8,17 +8,10 @@
         android:orientation="vertical"
         android:padding="20dp">
         <TextView
+            android:id="@+id/upload_author_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/author_id" />
-        <EditText
-            android:id="@+id/upload_author"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/author_id"
-            android:inputType="number"
-            android:importantForAutofill="no"
-            android:text="@string/default_author_id" />
+            android:paddingBottom="8dp" />
         <EditText
             android:id="@+id/upload_title"
             android:layout_width="match_parent"
