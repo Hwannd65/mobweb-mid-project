@@ -80,3 +80,7 @@ Earlier feature verification files are historical snapshots; their pending deplo
     "status": 200
   }
 ]
+
+
+2026-10-20 final demo update
+The current screenshots show cleaned demonstration data. Post 1 title/body now describe the Korean flag; post 2 describes the Liverpool emblem and its image path now ends in Liverpool_FC.png. The original image bytes and all IDs, authors, original timestamps, recommendation/comment counts were preserved. A DB backup remains outside the remote repository. Current read-only Android cloud sync passed (1 test, 5.106s) after restarting the same emulator with the Mac's current DNS; earlier failures were emulator DNS errors. See demo-results.txt. The Word remains 18 pages with 25 original captures and revised prose. Final artifacts and the separate local demonstration tools are committed together; production app code is unchanged.

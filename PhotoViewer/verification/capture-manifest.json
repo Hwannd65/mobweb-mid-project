@@ -60,143 +60,143 @@
     "format": "PNG",
     "width": 1080,
     "height": 2400,
-    "bytes": 71947,
-    "sha256": "06402f83fcca0639d71bb123d25a6d3891c25556d21d5169dd5d7b3371b9e98b"
+    "bytes": 71546,
+    "sha256": "ec46ee38e81f3009608202d1359a4ec182e9c20c6dc2188c342bee889aaa08a7"
   },
   {
     "name": "10_02_client_local_sync_after_upload.png",
     "format": "PNG",
     "width": 1080,
     "height": 2400,
-    "bytes": 424041,
-    "sha256": "f8d9f89458f386d31595bd0e5f2c7dee69a4f8d0385736ed0044c2a7ed27d80f"
+    "bytes": 529785,
+    "sha256": "af2a5729805099d41f374bd2fce665adf85e8dfaef60b6a9ecb13b29698edb8d"
   },
   {
     "name": "11_01_upload_picker.png",
     "format": "PNG",
     "width": 1080,
     "height": 2400,
-    "bytes": 1282248,
-    "sha256": "cc342f198fdeed27d0190c4247f6f4ec0a47914fad303475adf83beb67a1a43c"
+    "bytes": 445261,
+    "sha256": "8ccc3ea1e64198a066b3424e8a76b266013ee8130e1ea648b626693f97a47809"
   },
   {
     "name": "11_02_upload_form.png",
     "format": "PNG",
     "width": 1080,
     "height": 2400,
-    "bytes": 146714,
-    "sha256": "b8f7f05b609339651ee6818f713ba25f0fd177d2e4da71b23ae4953c2517ca3f"
+    "bytes": 107555,
+    "sha256": "d9156718288f375c7c0ef6e09c9ee6de05b00c925761943676003b893a3e5eb1"
   },
   {
     "name": "12_01_server_cloud_browser.jpg",
     "format": "JPEG",
-    "width": 1922,
-    "height": 2100,
-    "bytes": 293827,
-    "sha256": "81fc09cf307e0d30de346006afc9c2bab31a6f384826264b88b013edf07ba541"
+    "width": 2880,
+    "height": 1806,
+    "bytes": 280666,
+    "sha256": "5f4cd469c74aa9e760746a333aa9f94bcc3b173b52ad44082bd44dc71c74fe3c"
   },
   {
     "name": "13_03_client_cloud_bottom_search.png",
     "format": "PNG",
     "width": 1080,
     "height": 2400,
-    "bytes": 419295,
-    "sha256": "0aca143b645334a819f23a972eef9657c57d71b00b923330ae75bc20fbd24697"
+    "bytes": 411958,
+    "sha256": "d93b1986d80c0e3ebb7476f11f64754c96c63dc0c53f5c58b00e830b828ad19d"
   },
   {
     "name": "14_01_account_signup.png",
     "format": "PNG",
     "width": 1080,
     "height": 2400,
-    "bytes": 125092,
-    "sha256": "38af4ad4b458e9a520a7e762d50a88219ad9e0a02f0d26f723250a21bd356f8a"
+    "bytes": 118651,
+    "sha256": "0235b1e1bb1153f2b0cd96c3fbc1c2c58bd60ded851fc0b499befb31e6feeb06"
   },
   {
     "name": "14_02_account_login.png",
     "format": "PNG",
     "width": 1080,
     "height": 2400,
-    "bytes": 77849,
-    "sha256": "797cd889ebf7cee8bf9e00a141220944047ae88cccaad43f70d0faf292c3f7d6"
+    "bytes": 66963,
+    "sha256": "fdcc218d032bc96e41a7d5c7ce729e3949510d347d6bec0bcdc5e495d6035fc1"
   },
   {
     "name": "14_04_search_title.png",
     "format": "PNG",
     "width": 1080,
     "height": 2400,
-    "bytes": 260162,
-    "sha256": "e53d8cb71ebe6a47cf43c25cb35b830689f61162e822917239f3963cff3c43aa"
+    "bytes": 326662,
+    "sha256": "69699cee1710fb77bb49a42d5f0e80020ed1f8db85efb38449ceacd6bbc5f259"
   },
   {
     "name": "14_05_search_author.png",
     "format": "PNG",
     "width": 1080,
     "height": 2400,
-    "bytes": 255560,
-    "sha256": "d6b5a0ce81c88b2f6eeaca5c9d0e3925a3ef03deec2489236e7c00b9eb9e568e"
+    "bytes": 202729,
+    "sha256": "f8a3f6594317b6be4495fff474c0fe87cd2e00b4f0146b46a59ee597cdf09e63"
   },
   {
     "name": "14_07_post_recommend.png",
     "format": "PNG",
     "width": 1080,
     "height": 2400,
-    "bytes": 270611,
-    "sha256": "2718e0b3030d1cbcf3b5d9958175a68c8c6119df32356ff0e8aedc682962a02d"
+    "bytes": 204741,
+    "sha256": "8d8285a6e39ba479868824fef0a78a0627c58c7639a08a27d5a5cd9ca0fb07a0"
   },
   {
     "name": "14_08_post_cancel_recommend.png",
     "format": "PNG",
     "width": 1080,
     "height": 2400,
-    "bytes": 272159,
-    "sha256": "7e65e9f38707f6c8ddfa7fece6f6c9c35105dbd78419ce3f98d83fe4ea37939d"
+    "bytes": 205001,
+    "sha256": "9872c117f220119e20043085754a38b2cd962c282e289fddd2c7fb2e2c02e5ca"
   },
   {
     "name": "14_09_comment_created.png",
     "format": "PNG",
     "width": 1080,
     "height": 2400,
-    "bytes": 90715,
-    "sha256": "38eb73e66f14dcfec748fd8be0e361505d18ff46da730aa6c4460422e706ed96"
+    "bytes": 107918,
+    "sha256": "a83a5b29867a876fba82bbb1d86bcbdc10b4df1677b192a4e5aa2803f2362b3c"
   },
   {
     "name": "14_10_comment_deleted.png",
     "format": "PNG",
     "width": 1080,
     "height": 2400,
-    "bytes": 68785,
-    "sha256": "5dd4093e1e9228ff5ab27b46990e48054a33c98dc13f5478d16a914ee6010352"
+    "bytes": 95555,
+    "sha256": "176d2a5a0c31273b3d77ac33a6e4782fb4032ca7549f0d6b038854c75418b237"
   },
   {
     "name": "14_12_sort_newest.png",
     "format": "PNG",
     "width": 1080,
     "height": 2400,
-    "bytes": 185643,
-    "sha256": "d965123e68a1b8319739cfa5354d430e9c0e8cb200f7350feeeabbcf74697f31"
+    "bytes": 528491,
+    "sha256": "208c7d07c14f377236acadaa9c032643a4bde2db88942ec21f1d8be0be6deded"
   },
   {
     "name": "14_13_sort_oldest.png",
     "format": "PNG",
     "width": 1080,
     "height": 2400,
-    "bytes": 185201,
-    "sha256": "07760b99afaeac7ebd6e124b2e301204fb468c22178c9c6d8247be70c24cd0f6"
+    "bytes": 305159,
+    "sha256": "319536a9d7596e478574da9367dc5f4baa7f65407760d645cd037c00e32d86fa"
   },
   {
     "name": "14_14_sort_recommendations.png",
     "format": "PNG",
     "width": 1080,
     "height": 2400,
-    "bytes": 184925,
-    "sha256": "b8c33891df6144caf41e537d7a4670a88da17989d76c6a0a7180794888d6aaa3"
+    "bytes": 449710,
+    "sha256": "852cd4577ba71e8deac7fa0c57e12ec2ae8326e75f3f0ab2289f6aad3d656923"
   },
   {
     "name": "14_15_sort_comments.png",
     "format": "PNG",
     "width": 1080,
     "height": 2400,
-    "bytes": 184696,
-    "sha256": "278592813a36904da44492dd1365d642fe3465ce566616522c91b33eae7726dc"
+    "bytes": 401320,
+    "sha256": "2c1e8ddf009be20ff5973963850969e48d1b34a46b646ae5be4793a1f3e66f4e"
   }
 ]

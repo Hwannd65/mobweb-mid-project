@@ -1,0 +1,91 @@
+시연 데이터 정리 및 재촬영 — 2026-10-20 KST
+
+목적과 범위
+보고서 문장을 수행 과정과 관찰한 결과 중심으로 정리하고, 앱 화면에는 읽기 쉬운 시연 데이터를 사용했다.
+기존 자동 테스트의 특수문자·오류·권한 검증은 그대로 유지했다. 시연 데이터는 실제 사용자 활동을 주장하기 위한 것이 아니라 기능 비교용 예시다.
+Django/Android 서비스 구현 코드는 변경하지 않았다. 로컬 시연 준비 도구 tools/prepare_demo.py와 SubmissionDemoTest, 수집한 원본 이미지의 테스트 사본만 추가했다.
+
+로컬 시연 데이터
+- 별도 demo_settings와 임시 DB/media 경로 사용. 실제 PhotoBlogServer/db.sqlite3와 분리.
+- 시연 가입/로그인 아이디: hwannd65. 비밀번호는 실행 중 UUID로 생성하여 코드나 기록에 저장하지 않음. 클라우드의 동명 계정과 별개다.
+- 보조 예시 계정: minsu, jiyun, photo_friend. 로그인할 수 없는 비밀번호 상태로 준비.
+- 게시물: 태극기 / 기아 타이거즈 / LA 레이커스 / 리버풀 엠블럼. 제목·본문·이미지 일치.
+- 원본 이미지: pictures/Korea.jpg, KIA_Tigers.png, LA_Lakers.jpg, Liverpool_FC.png. 파일 선택기에도 이 이름 그대로 표시.
+- 에뮬레이터에 남아 있던 자동 생성 PhotoViewer_fixture 이미지 5장만 외부 임시 폴더에 백업 후 제거. 시연용 네 장은 한 번씩 표시된다. 프로젝트 pictures 원본은 수정하지 않음.
+- 앱에서 회원가입 → 로그인 → 실제 이미지 선택/multipart POST → 동기화 → 제목 검색 → 작성자 검색 → 추천/취소 → 댓글 작성/본인 삭제 → 네 가지 정렬 → 로그아웃 실행.
+- 로컬 동기화 4개, 리버풀 제목 검색 1개, minsu 작성자 검색 1개.
+- 기아 게시물 추천 1→2→동기화 후 유지→1. 댓글 3→4→본인 댓글 삭제 후 3.
+- 최신순 첫 항목 리버풀, 오래된순 태극기, 추천순 태극기(추천 2), 댓글순 기아(댓글 3).
+- SubmissionDemoTest.captureReadableDemonstration: OK (1 test), 36.57 seconds. 하나의 연속 시연 시나리오이며 화면 수를 테스트 수로 계산하지 않음.
+- 시나리오 준비 중 숨겨진 타인 삭제 버튼까지 선택한 matcher 문제와 로그아웃 안내 문구가 즉시 목록 갱신으로 바뀌는 대기 문제를 수정했다. 앱 동작이나 테스트 기대 결과를 약화하지 않고 표시된 본인 버튼과 최종 비로그인 상태를 확인했다.
+- 최종 시연으로 새 Android 원본 16장 생성. 동일 이미지가 반복되던 이전 선택 화면은 제출본에 사용하지 않음.
+
+클라우드 데이터 정리
+- 대상: hwannd65mid.pythonanywhere.com만 사용. 이전 과제 hwannd65 및 web_blog는 변경하지 않음.
+- 게시물 1: 클라우드 첫 게시물 → 태극기 / 태극기 이미지입니다.
+- 게시물 2: kia / Tigers → 리버풀 엠블럼 / 리버풀 로고를 올려봤습니다.
+- 게시물 2의 실제 이미지 이름 PhotoViewer_fixture_1792398881602.png → Liverpool_FC.png.
+- 원본 파일을 복사한 후 DB 경로를 변경했고 이전 파일은 삭제하지 않았다. 새 URL의 바이트가 pictures/Liverpool_FC.png와 동일함을 SHA256으로 확인.
+- 변경 전 공개 API 내용을 별도 임시 JSON에 보관. 이미지 경로 변경 전 서버 DB를 /home/hwannd65mid/db-before-demo-image-20261020.sqlite3에 백업(mode 600, 저장소 밖).
+- 관리자 폼이 게시물 2의 날짜에서 생략한 마이크로초를 원래 값으로 복원. 최종 API 대조에서 제목·내용·이미지 경로 이외의 id, 작성자, 날짜, 추천·댓글 수가 모두 동일함을 확인.
+- 별도 브라우저 창에서 실제 도메인이 보이는 최신 게시물 화면을 원본 촬영. 합성이나 이미지 속 문자 편집 없음.
+- CloudSyncIntegrationTest: OK (1 test), 5.106 seconds. 실제 HTTPS JSON/이미지 2개 표시 및 새 제목 확인. 이 동기화 테스트 자체는 GET만 사용.
+- 첫 클라우드 재검증은 에뮬레이터의 DNS 이름 조회 오류로 실패. Wi-Fi 재연결만으로 해결되지 않아 같은 Pixel_7을 데이터 삭제 없이 다시 실행하고 Mac에서 현재 사용하는 DNS 서버를 적용. 이후 동일 테스트 통과. 전역 DNS나 인증/HTTPS 검증 설정은 변경하지 않음.
+- 기본 클라우드 설정 앱으로 복원 설치. 토큰은 메모리에만 보관하므로 앱 재시작 뒤에는 재로그인 필요.
+
+제출 파일
+- 원본 캡처 25장 유지. 이번 교체는 Android 17장(로컬 16 + 클라우드 1), 클라우드 브라우저 1장, 총 18장.
+- Coverage 88% 화면과 초기 API/Telnet/JSON/Socket 증빙은 기존 원본 유지. 서버 테스트 76개/88%는 기존 실행 결과이며 오늘 새로 측정한 것으로 기재하지 않음.
+- Word는 18페이지. 교수님 양식과 14개 항목을 유지하며 설명·그림의 제목과 수치를 현재 캡처에 맞춤.
+- 원본 이미지 바이트, 해상도, 문서 내 포함 여부를 capture-manifest.json 및 SHA256으로 대조.
+- 현재 증빙과 과거 검증 기록을 구분하기 위해 이 기록을 추가. 과거 회귀 테스트 결과를 새 시연 결과로 덮어쓰지 않음.
+
+실제 Android 시연 실행 출력
+INSTRUMENTATION_STATUS: class=com.example.photoviewer.SubmissionDemoTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=
+com.example.photoviewer.SubmissionDemoTest:
+INSTRUMENTATION_STATUS: test=captureReadableDemonstration
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.photoviewer.SubmissionDemoTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=captureReadableDemonstration
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_RESULT: stream=
+
+Time: 36.57
+
+OK (1 test)
+
+
+INSTRUMENTATION_CODE: -1
+
+실제 클라우드 실행 출력
+INSTRUMENTATION_STATUS: class=com.example.photoviewer.CloudSyncIntegrationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=
+com.example.photoviewer.CloudSyncIntegrationTest:
+INSTRUMENTATION_STATUS: test=syncButtonDisplaysCloudImages
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.photoviewer.CloudSyncIntegrationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=syncButtonDisplaysCloudImages
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_RESULT: stream=
+
+Time: 5.106
+
+OK (1 test)
+
+
+INSTRUMENTATION_CODE: -1
