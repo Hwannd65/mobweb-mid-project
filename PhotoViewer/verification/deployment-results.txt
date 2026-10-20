@@ -13,9 +13,10 @@ External HTTPS checks: 15 passed (details below). No successful cloud data mutat
 Android emulator: installed default-cloud app; CloudSyncIntegrationTest passed (1 test, 4.915s).
 Observed real cloud JSON retrieval and image display with new sorting support and recommendation/comment controls.
 Previous timeout was not reproduced after this deployment; current external API and Android checks passed.
-Evidence: captures/13_02_client_cloud_updated_sync.png and captures/14_16_cloud_updated_api.png.
+Original deployment evidence was captured on 2026-10-19; captures/13_03_client_cloud_bottom_search.png was subsequently refreshed by a new read-only cloud sync test on 2026-10-20 (see recapture-results.txt).
+2026-10-20 selection: intermediate sync and supporting API screenshots removed; the original deployment test results below remain unchanged.
 Earlier feature verification files are historical snapshots; their pending deployment notes are superseded by this record.
-Word submission report remains to be finalized separately.
+2026-10-20 final update: Word report completed locally (18 pages, 25 original screenshots; 19 refreshed today). Coverage 88% and a domain-visible cloud browser image are included. The final report/captures/records are included together in the submission evidence commit; remote publication is checked by comparing that commit with origin/main. Today’s 16 distinct Android test successes are recorded separately in recapture-results.txt; the server results below remain historical.
 
 [
   {

@@ -9,8 +9,11 @@ other author/post owner delete 403, wrong parent 404, empty/whitespace/over-1000
 server-assigned author/post/date, chronological list, per-user can_delete, distinct recommendation/comment counts,
 refresh persistence, delete confirmation/cancel, guest read/login return, draft preservation on failure.
 Migration 0006_comment applied locally. Original DB counts preserved: users 1, posts 3, recommendations 0.
-Original PNG evidence: captures/14_09_comment_created.png, 14_10_comment_deleted.png, 14_11_comment_guest.png.
+Original PNG evidence retained: captures/14_09_comment_created.png, 14_10_comment_deleted.png.
+2026-10-20 selection: guest-view screenshot removed; the recorded permission tests remain unchanged.
 Default cloud build, test APK build and lint passed. Cloud connection check recorded below.
 GitHub push and PythonAnywhere deployment of new features remain pending. No cloud comments were written.
 Cloud read-only regression: NOT PASSED this run. Two Android attempts timed out while reading the deployed API; independent Mac HTTP GET also timed out after 20 seconds with no response bytes (HTTP 000).
 Default cloud APK/test APK remain installed. No deployment or remote configuration changes were made.
+
+2026-10-20 재촬영 반영: 제출 캡처를 최종 화면 배치로 갱신했다. 오늘의 새 실행 결과는 recapture-results.txt에 분리 기록했으며, 이 파일의 기존 실행 날짜와 결과는 과거 검증 기록으로 유지한다. 현재 앱은 정렬 상단·검색 하단 고정이며 키보드 대응 테스트도 다시 통과했다.

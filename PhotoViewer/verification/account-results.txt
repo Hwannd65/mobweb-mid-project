@@ -5,7 +5,10 @@ Verified: registration, server password validation, password hashing, duplicate 
 token login, identity lookup, rotation retention, logout revocation, authenticated multipart upload,
 invalid image rejection, author spoof prevention and other-user edit/delete denial.
 Existing assignment DB and cloud account data were not modified by these tests.
-Screenshots: captures/14_01_account_signup.png, 14_02_account_login.png, 14_03_account_logout.png.
+Submission screenshots retained: captures/14_01_account_signup.png, 14_02_account_login.png.
+2026-10-20 selection: redundant logout screenshot removed; the recorded logout test result remains unchanged.
 Cloud deployment of these account APIs is still pending.
 Final default-cloud build: existing read-only cloud synchronization test passed (1 test).
 Coverage excluding test code: blog total 81%; blog/accounts.py 98%.
+
+2026-10-20 재촬영 반영: 제출 캡처를 최종 화면 배치로 갱신했다. 오늘의 새 실행 결과는 recapture-results.txt에 분리 기록했으며, 이 파일의 기존 실행 날짜와 결과는 과거 검증 기록으로 유지한다. 현재 앱은 정렬 상단·검색 하단 고정이며 키보드 대응 테스트도 다시 통과했다.

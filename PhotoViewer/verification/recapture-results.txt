@@ -1,0 +1,35 @@
+최종 배치 재촬영 및 검증 — 2026-10-20 KST
+Implementation: d0fade1 (source unchanged)
+Repository: https://github.com/Hwannd65/mobweb-mid-project
+
+캡처
+- captures 원본 25장 유지. 기존 19장을 교체: Android 17장, Coverage 1장, 클라우드 브라우저 1장.
+- 메인 Android 화면은 정렬 상단 / 검색 하단 고정의 최종 배치. 댓글은 별도 화면.
+- Coverage 88%: 기존 최종 HTML을 실제 Safari에서 열어 촬영. HTML 생성 시각 2026-10-19 17:32 +0900, 촬영일 2026-10-20. 오늘 서버 Coverage를 새로 측정한 것은 아님.
+- Cloud browser: 실제 Safari 주소창에 hwannd65mid.pythonanywhere.com이 보임.
+- Safari 캡처 2장은 실제 JPEG 1922x2100, Android 캡처 17장은 PNG 1080x2400. 이미지 픽셀 편집/합성 없이 원본 포함.
+- 파일명·해상도·SHA256은 capture-manifest.json 참조.
+- 로컬 동기화는 테스트 게시물 15개와 새 업로드를 표시. 클라우드 동기화는 실제 게시물 2개를 표시.
+- 교체 전 캡처는 macOS 휴지통의 mobweb-replaced-captures-20261020-134139에 보존.
+
+실행 결과 (서로 다른 Android 테스트 메서드 16개 통과)
+1. AccountDjangoIntegrationTest 1 + SearchDjangoIntegrationTest 2 + RecommendationDjangoIntegrationTest 3 + CommentDjangoIntegrationTest 3 + SortDjangoIntegrationTest 3:
+   OK (12 tests), 79.967 seconds. 최신 화면 12장 생성.
+2. UploadIntegrationTest.selectImageAndUploadToDjango: 통과. 현재 파일 선택/게시 폼/업로드 후 동기화 화면 3장 생성.
+3. UploadIntegrationTest.invalidImageIsRejectedByDjango: 최초 시도는 테스트 계정 생성 단계에서 HTTP 429로 실패했고 실제 잘못된 파일 업로드 단계까지 도달하지 않음.
+   격리 로컬 서버를 재시작해 메모리의 rate-limit 상태만 초기화하고, 제한 설정 변경 없이 재시도.
+   invalidImageIsRejectedByDjango + AccountDjangoIntegrationTest.signupLoginRotateAndLogoutThroughRealDjango + SearchLayoutUiTest.footerRemainsVisibleAboveKeyboardInBothOrientations:
+   OK (3 tests), 21.191 seconds. 잘못된 이미지 HTTP 400, 가로·세로 키보드 대응 확인.
+   계정 검증은 시작 상태 정리를 위해 1회 중복 실행했으므로 서로 다른 테스트 수에 중복 산입하지 않음.
+4. CloudSyncIntegrationTest.syncButtonDisplaysCloudImages:
+   OK (1 test), 5.995 seconds. 실제 HTTPS GET으로 JSON 및 이미지 2개 조회. 클라우드 수정 요청 없음.
+
+검증 환경
+- 로컬 작업은 별도 테스트 fixture DB 사본과 별도 media를 사용하는 capture_settings에서 실행.
+- 서버는 127.0.0.1:8001, 에뮬레이터는 10.0.2.2:8001로 접근. 종료 후 격리 서버 중지.
+- 실제 PhotoBlogServer/db.sqlite3 SHA256 전후 동일:
+  9f9b9f1402096c807a10ffb5540ce51c6ea8356fa6a406d68145d769e137a950
+- 로컬 재촬영 후 기존 cloud app/test APK를 복원 설치하고 cloud 동기화 검증. 기본 cloud 설정으로 APK 재빌드도 성공.
+- 앱은 토큰을 프로세스 메모리에만 보관하므로 재시작 후 사용자 재로그인 필요. 사용자 토큰이나 비밀번호를 기록하지 않음.
+- Django/Android 소스 코드 변경 없음. 이전 과제 저장소와 hwannd65 PythonAnywhere 사이트 변경 없음.
+- 오늘의 Android 검증과 과거의 서버 76개 테스트/88% 결과를 구분. 기존 검증 파일의 과거 실행 기록은 유지.

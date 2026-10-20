@@ -19,3 +19,5 @@ GitHub push and PythonAnywhere deployment remain pending. The new app requires t
 No cloud sync pass is claimed for this feature before deployment.
 Existing-feature Android regression: all 12 additional tests passed (login UI 1, comments 3, recommendations 3, search 2, accounts 1, upload 2). Total 28 distinct Android tests passed across two batches.
 Final default-cloud app and test APK restored on emulator. Local isolated test server stopped after verification.
+
+2026-10-20 재촬영 반영: 제출 캡처를 최종 화면 배치로 갱신했다. 오늘의 새 실행 결과는 recapture-results.txt에 분리 기록했으며, 이 파일의 기존 실행 날짜와 결과는 과거 검증 기록으로 유지한다. 현재 앱은 정렬 상단·검색 하단 고정이며 키보드 대응 테스트도 다시 통과했다.

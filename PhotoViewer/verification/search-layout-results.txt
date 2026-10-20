@@ -5,7 +5,10 @@ Landscape keyboard extract mode disabled for search input so the in-app search c
 Tests passed: SearchLayoutUiTest (1; portrait keyboard open/closed, landscape keyboard open, full control visibility and footer bounds), SearchDjangoIntegrationTest (2; title/author search and reset through isolated local Django).
 Default-cloud build/test APK build/lint passed. CloudSyncIntegrationTest passed (1; 4.601s).
 Installed default-cloud app and reopened MainActivity on emulator-5554 for manual use.
-Screenshots: captures/14_17_search_bottom.png and captures/14_18_search_keyboard.png (1080x2400 originals).
+Submission screenshot retained: captures/09_01_client_start.png (1080x2400 original; renamed from the bottom-search screenshot on 2026-10-20).
+2026-10-20 selection: keyboard screenshot removed; the recorded IME visibility tests remain unchanged.
 No backend changes were made. This layout revision, its regression test and original screenshots are included together in the GitHub update.
 
 Manual cloud testing reported by the user, completed by 2026-10-20 KST: signup/login, search, recommendation/cancel with sync persistence, comments, newest/oldest/recommendation/comment sorting all worked.
+
+2026-10-20 재촬영 반영: 제출 캡처를 최종 화면 배치로 갱신했다. 오늘의 새 실행 결과는 recapture-results.txt에 분리 기록했으며, 이 파일의 기존 실행 날짜와 결과는 과거 검증 기록으로 유지한다. 현재 앱은 정렬 상단·검색 하단 고정이며 키보드 대응 테스트도 다시 통과했다.

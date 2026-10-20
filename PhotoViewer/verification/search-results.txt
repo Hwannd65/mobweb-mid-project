@@ -5,5 +5,8 @@ Android: 10 tests passed (7 HTTP contract tests, 1 login form test, 2 actual sea
 Integration target: isolated Django DB at http://10.0.2.2:8001.
 Verified: title/author search, Korean phrase, reserved query characters, empty results,
 reset to the full list, unsupported all/text scopes rejected with HTTP 400, legacy server detection.
-Screenshots: captures/14_04_search_title.png, 14_05_search_author.png, 14_06_search_empty.png.
+Submission screenshots retained: captures/14_04_search_title.png, 14_05_search_author.png.
+2026-10-20 selection: empty-result screenshot removed; the recorded empty-result test remains unchanged.
 GitHub push and cloud deployment of account/search changes remain pending.
+
+2026-10-20 재촬영 반영: 제출 캡처를 최종 화면 배치로 갱신했다. 오늘의 새 실행 결과는 recapture-results.txt에 분리 기록했으며, 이 파일의 기존 실행 날짜와 결과는 과거 검증 기록으로 유지한다. 현재 앱은 정렬 상단·검색 하단 고정이며 키보드 대응 테스트도 다시 통과했다.
