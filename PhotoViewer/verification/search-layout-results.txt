@@ -1,0 +1,11 @@
+Search footer layout verification — 2026-10-19 KST
+Layout: account/sync/sort remain above scrolling posts; search field/target and search/reset buttons are fixed at the bottom.
+Main content is measured separately from the footer. Bottom padding uses max(system bar inset, IME inset).
+Landscape keyboard extract mode disabled for search input so the in-app search controls stay accessible.
+Tests passed: SearchLayoutUiTest (1; portrait keyboard open/closed, landscape keyboard open, full control visibility and footer bounds), SearchDjangoIntegrationTest (2; title/author search and reset through isolated local Django).
+Default-cloud build/test APK build/lint passed. CloudSyncIntegrationTest passed (1; 4.601s).
+Installed default-cloud app and reopened MainActivity on emulator-5554 for manual use.
+Screenshots: captures/14_17_search_bottom.png and captures/14_18_search_keyboard.png (1080x2400 originals).
+No backend changes were made. This layout revision, its regression test and original screenshots are included together in the GitHub update.
+
+Manual cloud testing reported by the user, completed by 2026-10-20 KST: signup/login, search, recommendation/cancel with sync persistence, comments, newest/oldest/recommendation/comment sorting all worked.
